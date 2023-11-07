@@ -1,0 +1,42 @@
+name: Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      manual_param:
+        description: 'Custom parameter for manual trigger'
+        required: true
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  run-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run the script
+        run: |
+          if [ "${{ github.event.inputs.manual_param }}" ]; then
+            python main.py "${{ github.event.inputs.manual_param }}"
+          else
+            python mian.py -c
+          fi
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: books
+          path: books.json
+        if: github.event_name == 'workflow_dispatch'
+        
