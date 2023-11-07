@@ -29,7 +29,7 @@ jobs:
       - name: Run the script
         run: |
           if [ "${{ github.event.inputs.manual_param }}" ]; then
-            python main.py "${{ github.event.inputs.manual_param }}"
+            python main.py ${{ github.event.inputs.manual_param }}
           else
             python mian.py -c
           fi
