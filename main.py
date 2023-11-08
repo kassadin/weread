@@ -1,15 +1,18 @@
 import argparse
-import time
+import json
+import logging
 import random
+import sys
+import time
+import traceback
 
 import requests
-import sys, traceback, logging
+
 import config
-import json
 
 config = config.read_config()
 
-logger = logging.getLogger("weread")
+logger = logging.getLogger()
 
 
 def exception_handler(exctype, value, tb):
@@ -59,11 +62,11 @@ def incremental_update_mode():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Web Scraper with Different Modes')
+    parser = argparse.ArgumentParser()
 
-    parser.add_argument('-c', action='store_true', help='Check mode (check if the website is accessible)')
-    parser.add_argument('-a', action='store_true', help='Full update mode (retrieves all data)')
-    parser.add_argument('-u', action='store_true', help='Incremental update mode (retrieves new data)')
+    parser.add_argument('-c', action='store_true', help='check')
+    parser.add_argument('-a', action='store_true', help='full')
+    parser.add_argument('-u', action='store_true', help='incremental')
 
     args = parser.parse_args()
 

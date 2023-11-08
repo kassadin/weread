@@ -31,7 +31,7 @@ jobs:
           if [ "${{ github.event.inputs.manual_param }}" ]; then
             python main.py ${{ github.event.inputs.manual_param }}
           else
-            python mian.py -c
+            python main.py -c
           fi
 
       - uses: actions/upload-artifact@v3
