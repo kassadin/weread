@@ -4,7 +4,6 @@ import logging
 import random
 import sys
 import time
-import traceback
 
 import requests
 
@@ -12,16 +11,8 @@ import config
 
 config = config.read_config()
 
-logger = logging.getLogger()
-
-
-def exception_handler(exctype, value, tb):
-    logger.error(exctype)
-    logger.error(value)
-    logger.error(traceback.extract_tb(tb))
-
-
-sys.excepthook = exception_handler
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 headers = {
     "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36",
@@ -32,6 +23,7 @@ headers = {
 def get_page(maxIndex):
     url = f"https://weread.qq.com/web/bookListInCategory/{config['category']}?maxIndex={maxIndex}"
     res = requests.get(url, headers=headers, )
+    logger.info(f"{maxIndex:}: http status: {res.status_code}")
     return res.json()
 
 
@@ -46,8 +38,9 @@ def check_mode():
 
 def full_update_mode():
     books = []
-    for i in range(0, config["totalCount"], 20):
+    for i in range(0, 500, 20):
         resp = get_page(i)
+        logger.info(f"{i:} {resp['totalCount']}, {resp['hasMore']}")
         books.extend(resp["books"])
         if resp['hasMore'] == 0:
             break
