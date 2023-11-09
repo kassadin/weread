@@ -33,7 +33,7 @@ def check_mode():
     if resp["totalCount"] == config["totalCount"]:
         logger.info("No changes: TotalCount is the same as the existing configuration.")
     else:
-        logger.info(f"Changes detected: TotalCount has changed from {config['totalCount']} to {json['totalCount']}.")
+        logger.info(f"Changes detected: TotalCount has changed from {config['totalCount']} to {resp['totalCount']}.")
 
 
 def full_update_mode():
